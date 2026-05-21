@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAVI Sapien Sizing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0f2f5;
+      --card: #ffffff;
+      --primary: #006d6d;
+      --primary-dark: #005555;
+      --primary-light: #e6f4f4;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f5;
+      --gray-200: #e4e8ed;
+      --gray-300: #c8d0da;
+      --gray-400: #9aa5b0;
+      --gray-500: #6b7785;
+      --gray-600: #4a5568;
+      --optimal: #15803d;
+      --optimal-bg: #edf7f2;
+      --optimal-border: #6bc99a;
+      --amber: #a16207;
+      --amber-bg: #fef8e6;
+      --amber-border: #e2b84a;
+      --red: #b91c1c;
+      --red-bg: #fef0ee;
+      --red-border: #e07a6a;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: #1a2533;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--primary);
+      padding: 20px 24px 18px;
+    }
+    .card-header h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+    .card-header p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 3px;
+    }
+
+    .card-body { padding: 20px 24px; }
+
+    .field { margin-bottom: 14px; }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: 5px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #1a2533;
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,109,109,0.1);
+      background: #fff;
+    }
+    .field input[type="number"]::-webkit-inner-spin-button,
+    .field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .field input[type="number"] { -moz-appearance: textfield; }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%239aa5b0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 34px;
+    }
+
+    .valve-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .valve-btn {
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 10px 4px 8px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--gray-50);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .valve-btn:hover { border-color: var(--primary); }
+    .valve-btn.active {
+      border-color: var(--primary);
+      background: var(--primary);
+    }
+    .valve-btn .vb-size {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      display: block;
+    }
+    .valve-btn.active .vb-size { color: #fff; }
+    .valve-btn .vb-sub {
+      font-size: 9px;
+      color: var(--gray-400);
+      display: block;
+      margin-top: 2px;
+    }
+    .valve-btn.active .vb-sub { color: rgba(255,255,255,0.7); }
+
+    .divider { height: 1px; background: var(--gray-200); margin: 16px 0; }
+
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .res-box {
+      border-radius: var(--radius);
+      padding: 14px 12px 12px;
+      border: 2px solid transparent;
+    }
+    .res-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 8px 8px 0 0;
+    }
+    .res-box { position: relative; overflow: hidden; padding-top: 18px; }
+
+    .res-box.optimal   { background: var(--optimal-bg);   border-color: var(--optimal-border); }
+    .res-box.optimal::before { background: var(--optimal); }
+    .res-box.optimal .res-val { color: var(--optimal); }
+
+    .res-box.amber   { background: var(--amber-bg);      border-color: var(--amber-border); }
+    .res-box.amber::before { background: var(--amber); }
+    .res-box.amber .res-val { color: var(--amber); }
+
+    .res-box.red     { background: var(--red-bg);        border-color: var(--red-border); }
+    .res-box.red::before { background: var(--red); }
+    .res-box.red .res-val { color: var(--red); }
+
+    .res-box.neutral { background: var(--gray-100);      border-color: var(--gray-200); }
+    .res-box.neutral::before { background: var(--gray-400); }
+    .res-box.neutral .res-val { color: var(--gray-400); }
+
+    .res-box::before { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+
+    .res-tag {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--gray-400);
+      margin-bottom: 4px;
+    }
+    .res-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .res-val.empty { font-size: 16px; color: var(--gray-300); }
+    .res-note { font-size: 11px; font-weight: 500; color: var(--gray-500); line-height: 1.3; }
+
+    .rec-bar {
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      border: 2px solid;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rec-bar.optimal { background: var(--optimal-bg); border-color: var(--optimal-border); }
+    .rec-bar.amber   { background: var(--amber-bg);  border-color: var(--amber-border); }
+    .rec-bar.red     { background: var(--red-bg);     border-color: var(--red-border); }
+    .rec-bar.neutral { background: var(--gray-100);   border-color: var(--gray-200); }
+
+    .rec-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .rec-bar.optimal .rec-dot   { background: var(--optimal); }
+    .rec-bar.amber   .rec-dot   { background: var(--amber); }
+    .rec-bar.red     .rec-dot   { background: var(--red); }
+    .rec-bar.neutral .rec-dot   { background: var(--gray-400); }
+
+    .rec-text { font-size: 12.5px; font-weight: 600; line-height: 1.3; }
+    .rec-bar.optimal .rec-text { color: var(--optimal); }
+    .rec-bar.amber   .rec-text { color: var(--amber); }
+    .rec-bar.red     .rec-text { color: var(--red); }
+    .rec-bar.neutral .rec-text { color: var(--gray-500); }
+
+    .card-footer { padding: 0 24px 20px; }
+
+    .btn-download {
+      width: 100%;
+      height: 44px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background 0.15s;
+    }
+    .btn-download:hover { background: var(--primary-dark); }
+    .btn-download:active { opacity: 0.9; }
+
+    .disclaimer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: var(--gray-400);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 460px) {
+      .card-body, .card-footer { padding-left: 18px; padding-right: 18px; }
+      .card-header { padding-left: 18px; padding-right: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <h1>TAVI Sapien Sizing Calculator</h1>
+    <p>Sapien 3 Ultra RESILIA · Area-derived diameter method</p>
+  </div>
+
+  <div class="card-body">
+    <div class="field">
+      <label>Annulus CT Area (mm²)</label>
+      <input type="number" id="annArea" placeholder="e.g. 400" step="0.1" />
+    </div>
+
+    <div class="field">
+      <label>Valve Size</label>
+      <select id="valveSize">
+        <option value="20">20 mm — 328 mm² · 11 cc</option>
+        <option value="23">23 mm — 406 mm² · 17 cc</option>
+        <option value="26" selected>26 mm — 519 mm² · 23 cc</option>
+        <option value="29">29 mm — 649 mm² · 33 cc</option>
+      </select>
+    </div>
+
+    <div class="valve-grid" id="valveGrid"></div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label>Volume Offset (cc) <span style="font-weight:400;color:var(--gray-400);font-size:11px;">— extra or reduced from nominal</span></label>
+      <input type="number" id="volOffset" value="0" step="0.5" />
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="results">
+      <div class="res-box neutral" id="nomBox">
+        <div class="res-tag">Nominal</div>
+        <div class="res-val empty" id="nomVal">—</div>
+        <div class="res-note" id="nomNote">Enter annulus area</div>
+      </div>
+      <div class="res-box neutral" id="adjBox">
+        <div class="res-tag">Adjusted</div>
+        <div class="res-val empty" id="adjVal">—</div>
+        <div class="res-note" id="adjNote">With volume offset</div>
+      </div>
+    </div>
+
+    <div id="calcBreakdown" style="display:none;">
+      <div style="background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--gray-400);margin-bottom:8px;">Calculation Breakdown</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:12px;">
+          <div><span style="color:var(--gray-500);">Annulus area</span><span style="float:right;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--gray-600);" id="cbAnn">—</span></div>
+          <div><span style="color:var(--gray-500);">Valve nominal area</span><span style="float:right;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--gray-600);" id="cbValveArea">—</span></div>
+          <div><span style="color:var(--gray-500);">Valve nominal vol</span><span style="float:right;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--gray-600);" id="cbValveVol">—</span></div>
+          <div><span style="color:var(--gray-500);">Volume offset</span><span style="float:right;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--gray-600);" id="cbOffset">—</span></div>
+          <div style="grid-column:1/-1;height:1px;background:var(--gray-200);margin:2px 0;"></div>
+          <div><span style="color:var(--gray-500);">Adj volume</span><span style="float:right;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--primary);" id="cbAdjVol">—</span></div>
+          <div><span style="color:var(--gray-500);">Adj area</span><span style="float:right;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--primary);" id="cbAdjArea">—</span></div>
+          <div style="grid-column:1/-1;height:1px;background:var(--gray-200);margin:2px 0;"></div>
+          <div style="grid-column:1/-1;font-size:11.5px;color:var(--gray-500);">
+            Adj area formula: <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--gray-600);" id="cbFormula">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-bar neutral" id="recBar">
+      <div class="rec-dot"></div>
+      <div class="rec-text" id="recText">Enter annulus area to calculate</div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-download" id="downloadBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Report
+    </button>
+    <div class="disclaimer">For clinical planning only · Correlate with CT planimetry and MDT review</div>
+  </div>
+</div>
+
+<script>
+  const VALVES = {
+    20: { area: 328,  vol: 11 },
+    23: { area: 406,  vol: 17 },
+    26: { area: 519,  vol: 23 },
+    29: { area: 649,  vol: 33 },
+  };
+  const SIZES = [20, 23, 26, 29];
+
+  function oversize(nomArea, annArea) {
+    return ((nomArea - annArea) / annArea) * 100;
+  }
+  function adjArea(nomArea, nomVol, offset) {
+    return nomArea * (nomVol + offset) / nomVol;
+  }
+
+  function status(pct) {
+    if (isNaN(pct)) return 'neutral';
+    if (pct >= 10 && pct <= 20) return 'optimal';
+    if ((pct >= 5 && pct < 10) || (pct > 20 && pct <= 30)) return 'amber';
+    return 'red';
+  }
+
+  function statusText(pct) {
+    if (isNaN(pct)) return '';
+    if (pct < 5) return 'Undersized — PVL risk';
+    if (pct < 10) return 'Mild oversizing';
+    if (pct <= 20) return 'Optimal — recommended';
+    if (pct <= 30) return 'High — monitor conduction';
+    return 'Severe — rupture risk';
+  }
+
+  function recText(pct) {
+    if (isNaN(pct)) return 'Enter annulus area to calculate';
+    if (pct < 5) return pct.toFixed(1) + '% — Undersized: consider larger valve';
+    if (pct < 10) return pct.toFixed(1) + '% — Mild: consider adjacent valve';
+    if (pct <= 20) return pct.toFixed(1) + '% — Optimal: recommended';
+    if (pct <= 30) return pct.toFixed(1) + '% — Borderline high: monitor closely';
+    return pct.toFixed(1) + '% — Severe: annular rupture risk';
+  }
+
+  // Valve grid
+  const grid = document.getElementById('valveGrid');
+  SIZES.forEach(sz => {
+    const v = VALVES[sz];
+    const el = document.createElement('div');
+    el.className = 'valve-btn' + (sz === 26 ? ' active' : '');
+    el.dataset.size = sz;
+    el.onclick = () => selectValve(sz);
+    el.innerHTML = `<span class="vb-size">${sz}</span><span class="vb-sub">${v.area}mm²</span>`;
+    grid.appendChild(el);
+  });
+
+  function selectValve(sz) {
+    document.querySelectorAll('.valve-btn').forEach(e => {
+      e.classList.toggle('active', parseInt(e.dataset.size) === sz);
+    });
+    document.getElementById('valveSize').value = sz;
+    calc();
+  }
+
+  function calc() {
+    const ann = parseFloat(document.getElementById('annArea').value);
+    const sz = parseInt(document.getElementById('valveSize').value);
+    const off = parseFloat(document.getElementById('volOffset').value) || 0;
+    const v = VALVES[sz];
+
+    const nom = document.getElementById('nomBox');
+    const adj = document.getElementById('adjBox');
+    const nomVal = document.getElementById('nomVal');
+    const adjVal = document.getElementById('adjVal');
+    const nomNote = document.getElementById('nomNote');
+    const adjNote = document.getElementById('adjNote');
+    const recBar = document.getElementById('recBar');
+    const recText = document.getElementById('recText');
+    const breakdown = document.getElementById('calcBreakdown');
+
+    if (!ann || ann <= 0) {
+      nom.className = 'res-box neutral';
+      adj.className = 'res-box neutral';
+      nomVal.textContent = '—';
+      nomVal.className = 'res-val empty';
+      nomNote.textContent = 'Enter annulus area';
+      adjVal.textContent = '—';
+      adjVal.className = 'res-val empty';
+      adjNote.textContent = 'With volume offset';
+      recBar.className = 'rec-bar neutral';
+      recText.textContent = 'Enter annulus area to calculate';
+      breakdown.style.display = 'none';
+      return;
+    }
+
+    const nomPct = oversize(v.area, ann);
+    const aa = adjArea(v.area, v.vol, off);
+    const adjPct = oversize(aa, ann);
+    const s = status(adjPct);
+
+    nom.className = 'res-box ' + status(nomPct);
+    nomVal.textContent = nomPct.toFixed(1) + '%';
+    nomVal.className = 'res-val';
+    nomNote.textContent = statusText(nomPct);
+
+    adj.className = 'res-box ' + s;
+    adjVal.textContent = adjPct.toFixed(1) + '%';
+    adjVal.className = 'res-val';
+    adjNote.textContent = statusText(adjPct);
+
+    recBar.className = 'rec-bar ' + s;
+    recText.textContent = recText(adjPct);
+
+    // Populate breakdown
+    breakdown.style.display = 'block';
+    document.getElementById('cbAnn').textContent = ann.toFixed(1) + ' mm²';
+    document.getElementById('cbValveArea').textContent = v.area + ' mm²';
+    document.getElementById('cbValveVol').textContent = v.vol + ' cc';
+    document.getElementById('cbOffset').textContent = (off >= 0 ? '+' : '') + off.toFixed(1) + ' cc';
+    document.getElementById('cbAdjVol').textContent = (v.vol + off).toFixed(1) + ' cc';
+    document.getElementById('cbAdjArea').textContent = aa.toFixed(1) + ' mm²';
+    document.getElementById('cbFormula').textContent =
+      v.area + ' × (' + v.vol + (off >= 0 ? '+' : '') + off.toFixed(1) + ')/' + v.vol + ' = ' + aa.toFixed(1) + ' mm²';
+  }
+
+  ['annArea','valveSize','volOffset'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calc);
+    document.getElementById(id).addEventListener('change', calc);
+  });
+
+  // Download
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const ann = parseFloat(document.getElementById('annArea').value);
+    const sz = parseInt(document.getElementById('valveSize').value);
+    const off = parseFloat(document.getElementById('volOffset').value) || 0;
+    const v = VALVES[sz];
+    const nomPct = ann && ann > 0 ? oversize(v.area, ann) : null;
+    const aa = ann && ann > 0 ? adjArea(v.area, v.vol, off) : null;
+    const adjPct = ann && ann > 0 ? oversize(aa, ann) : null;
+    const now = new Date();
+    const ds = now.toLocaleDateString('en-GB', { day:'2-digit',month:'short',year:'numeric' });
+    const ts = now.toLocaleTimeString('en-GB', { hour:'2-digit',minute:'2-digit' });
+
+    let c = '';
+    c += '═══════════════════════════════════════════════════\n';
+    c += '  TAVI SAPIEN 3 ULTRA — CLINICAL SIZING REPORT\n';
+    c += '═══════════════════════════════════════════════════\n\n';
+    c += '  Date: ' + ds + '  |  ' + ts + '\n';
+    c += '─────────────────────────────────────────────────\n\n';
+    c += '  Annulus CT Area    : ' + (ann && ann > 0 ? ann.toFixed(1) + ' mm²' : 'N/A') + '\n';
+    c += '  Valve Size         : ' + sz + ' mm\n';
+    c += '  Valve Area (nom.)  : ' + v.area + ' mm²\n';
+    c += '  Nominal Volume     : ' + v.vol + ' cc\n';
+    c += '  Volume Offset      : ' + (off >= 0 ? '+' : '') + off.toFixed(1) + ' cc\n';
+    c += '  Adjusted Volume    : ' + (v.vol + off).toFixed(1) + ' cc\n';
+    c += '  Adjusted Area     : ' + (aa ? aa.toFixed(1) + ' mm²' : 'N/A') + '\n\n';
+    c += '  Nominal Oversizing : ' + (nomPct !== null ? nomPct.toFixed(1) + '%  [' + statusText(nomPct) + ']' : 'N/A') + '\n';
+    c += '  Adjusted Oversizing: ' + (adjPct !== null ? adjPct.toFixed(1) + '%  [' + statusText(adjPct) + ']' : 'N/A') + '\n\n';
+    c += '─────────────────────────────────────────────────\n\n';
+    c += '  Optimal:  10%–20%  |  Borderline:  5%–10% / 20%–30%\n';
+    c += '  Undersized: <5%  |  Severe: >30%\n\n';
+    c += '═══════════════════════════════════════════════════\n';
+    c += '  FOR CLINICAL PLANNING ONLY\n';
+    c += '═══════════════════════════════════════════════════\n';
+
+    const blob = new Blob([c], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'TAVI_Sapien_Sizing_' + ds.replace(/ /g,'_') + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  });
+
+  calc();
+</script>
+</body>
+</html>
